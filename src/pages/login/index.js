@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import api from "../../utils/api";
 import Layout from "../../components/Layout";
 import styles from "./loginstyles"; // Import styles from the separate file
-import jwtDecode from "jwt-decode";
+
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -17,15 +17,21 @@ export default function Login() {
     e.preventDefault();
     try {
       const response = await api.post("/login", { username, password });
+      const { access_token, userId, userRole, userName } = response.data;
+
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("userRole", userRole.name);
+      localStorage.setItem("userName", username);
+
+      if (userRole.name === "User") {
+        router.push("/usertasks");
+      } else if (userRole.name === "Admin") {
+        router.push("/admintasks");
+      }else {
+        setError("Invalid user role. Access denied.");
+      }
       
-      // Store the access token in localStorage
-      localStorage.setItem("access_token", response.data.access_token);
-      
-      // Store the userId in localStorage
-      localStorage.setItem("userId", response.data.userId);
-  
-      // Redirect to tasks page
-      router.push("/tasks");
     } catch (error) {
       setError("Invalid Credentials");
     }
