@@ -9,7 +9,7 @@ export default function Layout({ children }) {
         <span style={styles.separator}>|</span>
         <Link href="/login" style={styles.navLink}>Login</Link>
         <span style={styles.separator}>|</span>
-        <Link href="/register" style={styles.navLink}>Register</Link>
+        <Link href="/register" style={styles.navLink}>Register user</Link>
       </nav>
       <main style={styles.main}>{children}</main>
     </div>
